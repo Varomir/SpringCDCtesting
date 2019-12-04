@@ -12,6 +12,6 @@ For run:
 
 URL:
 
-http://localhost:8080/actuator
+http://localhost:8081/actuator
 
-http://localhost:8080/actuator/health
+http://localhost:8081/actuator/health
