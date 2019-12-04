@@ -7,11 +7,14 @@ For build without containers:
 
 ```mvn clean package```
 
-For run:
+Run all test (in parallel mode by default):
+
+```mvn clean test```
+
+For run DemoApp:
+
 ```java -Dspring.profiles.active=default -jar target/spring-cdc-testing-0.0.1-SNAPSHOT.war```
 
 URL:
-
-http://localhost:8081/actuator
-
-http://localhost:8081/actuator/health
+* http://localhost:8081/actuator
+* http://localhost:8081/actuator/health

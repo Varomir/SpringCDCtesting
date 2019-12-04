@@ -6,18 +6,18 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.CONCURRENT)
-public class HelloWorldControllerTest {
+public class HelloWorldControllerConcurencyExecutionTest {
 
     private HelloWorldController controllerUnderTest = new HelloWorldController();
 
-    @DisplayName("'hello()' method should return empty string")
+    @DisplayName("'hello()' method should return non empty string")
     @Test
     public void shouldReturnNotEmptyGreetings() {
         System.out.println(">> Thread_ID: " + Thread.currentThread().getId());
-        assertFalse(controllerUnderTest.hello().isEmpty(),
+        assertTrue(controllerUnderTest.hello().length() > 0,
                 "Returned text from the controller was empty");
     }
 
