@@ -8,6 +8,9 @@ target/
 # Log file
 *.log
 
+# MacOS specific
+.DS_Store
+
 # Package Files
 *.jar
 *.war
