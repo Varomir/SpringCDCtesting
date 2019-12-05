@@ -1,13 +1,13 @@
 package com.varomir.qa.rest;
 
-import com.varomir.qa.DemoApp;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {DemoApp.class})
+@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @Execution(ExecutionMode.CONCURRENT)
 public class HelloWorldControllerTest {
 
