@@ -24,14 +24,11 @@ public class PersonRepositoryIntegrationTest {
     @DisplayName("'PersonRepository' should be able to deal with DataBase")
     @Test
     public void shouldSaveAndFetchPerson() {
-        System.out.println(">> From 'PersonRepositoryIntegrationTest.shouldSaveAndFetchPerson()' Thread_ID: "
-                + Thread.currentThread().getId());
-
         Person ivan = new Person("Ivan", "Ivanov");
         repositoryUnderTest.save(ivan);
 
         Optional<Person> maybeIvan = repositoryUnderTest.findByLastName("Ivanov");
-        
+
         assertTrue(maybeIvan.isPresent(), "Couldn't fetch the Person by it's Lastname!");
         assertEquals("Ivanov", maybeIvan.get().getLastName(), "Extracte Person Lastname was not as expected!");
     }
