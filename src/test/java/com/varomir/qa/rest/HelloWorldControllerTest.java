@@ -1,4 +1,4 @@
-package com.varomir.qa.controllers;
+package com.varomir.qa.rest;
 
 import com.varomir.qa.DemoApp;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +26,6 @@ public class HelloWorldControllerTest {
     @Test
     public void shouldReturnNotEmptyGreetings() {
         System.out.println(">> From 'HelloWorldControllerTest.shouldReturnNotEmptyGreetings()' Thread_ID: " + Thread.currentThread().getId());
-        System.out.println(">> Thread_activeCount: " + Thread.activeCount());
 
         assertFalse(controllerUnderTest.hello().isEmpty(),
                 "Returned text from the controller was empty");
@@ -36,7 +35,6 @@ public class HelloWorldControllerTest {
     @Test
     public void shouldReturnExpectedGreetings() {
         System.out.println(">> From 'HelloWorldControllerTest.shouldReturnExpectedGreetings()' Thread_ID: " + Thread.currentThread().getId());
-        System.out.println(">> Thread_activeCount: " + Thread.activeCount());
 
         assertEquals("Hello World!", controllerUnderTest.hello(),
                 "Returned text from the controller was not as expected!");
