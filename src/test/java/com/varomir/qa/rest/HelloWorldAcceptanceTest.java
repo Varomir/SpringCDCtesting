@@ -22,8 +22,6 @@ public class HelloWorldAcceptanceTest {
     @DisplayName("'/hello' endpoint should return expected response body text via HTTP protocol")
     @Test
     void shouldReturnExpectedGreetingsViaHTTP() {
-        System.out.println(">> From 'HelloWorldAcceptanceTest.shouldReturnExpectedGreetingsViaHTTP()' Thread_ID: "
-                + Thread.currentThread().getId());
         when()
                 .get("http://localhost:8080/hello")
         .then()
