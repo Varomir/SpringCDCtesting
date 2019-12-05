@@ -29,7 +29,7 @@ public class DemoAppTest {
         ResponseEntity<String> response = restTemplate.getForEntity(
                 new URL("http://localhost:" + port + "/actuator/info").toString(), String.class);
         assertEquals("{}", response.getBody());
-        
+
         System.out.println(">> From 'SpringBootTest.getActuatorInfo()' Thread_ID: " + Thread.currentThread().getId());
     }
 }
