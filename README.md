@@ -1,7 +1,9 @@
-### Spring CDC testing demo project
+# Spring CDC testing demo project
+
+CDC (Consumer-Driven Contract) tests example with Spring microservices World.
 
 
-### Build, deploy and running pure Java application without container
+#### Build, deploy and running pure Java application without container
 
 For build without containers:
 
