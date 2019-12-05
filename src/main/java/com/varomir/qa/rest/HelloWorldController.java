@@ -1,4 +1,4 @@
-package com.varomir.qa.controllers;
+package com.varomir.qa.rest;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
