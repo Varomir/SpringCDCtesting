@@ -1,5 +1,7 @@
 package com.varomir.qa.repository;
 
+import com.github.javafaker.Name;
+import com.varomir.qa.commons.utils.WithFaker;
 import com.varomir.qa.domain.Person;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,21 +17,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-public class PersonRepositoryIntegrationTest {
+public class PersonRepositoryIntegrationTest implements WithFaker {
 
     @Autowired
     private PersonRepository repositoryUnderTest;
+    private String firstName, lastName;
 
 
     @DisplayName("'PersonRepository' should be able to deal with DataBase")
     @Test
     public void shouldSaveAndFetchPerson() {
-        Person ivan = new Person("Ivan", "Ivanov");
-        repositoryUnderTest.save(ivan);
+        Name fakePersonName = getFakePersonName();
+        firstName = fakePersonName.firstName();
+        lastName = fakePersonName.lastName();
+        Person fakePerson = new Person(firstName, lastName);
+        repositoryUnderTest.save(fakePerson);
 
-        Optional<Person> maybeIvan = repositoryUnderTest.findByLastName("Ivanov");
+        Optional<Person> maybeFakePerson = repositoryUnderTest.findByLastName(lastName);
 
-        assertTrue(maybeIvan.isPresent(), "Couldn't fetch the Person by it's Lastname!");
-        assertEquals("Ivanov", maybeIvan.get().getLastName(), "Extracte Person Lastname was not as expected!");
+        assertTrue(maybeFakePerson.isPresent(), "Couldn't fetch the Person by it's LastName!");
+        assertEquals(lastName, maybeFakePerson.get().getLastName(), "Extracted Person LastName was not as expected!");
     }
 }
