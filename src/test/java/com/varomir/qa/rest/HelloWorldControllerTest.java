@@ -37,14 +37,7 @@ public class HelloWorldControllerTest {
         initMocks(this);
         controllerUnderTest = new HelloWorldController(personRepository);
     }
-
-    @DisplayName("'hello()' method should return empty string")
-    @Test
-    public void shouldReturnNotEmptyGreetings() {
-        assertFalse(controllerUnderTest.hello().isEmpty(),
-                "Returned text from the controller was empty");
-    }
-
+    
     @DisplayName("'hello()' method should return expected greetings")
     @Test
     public void shouldReturnExpectedGreetings() {
