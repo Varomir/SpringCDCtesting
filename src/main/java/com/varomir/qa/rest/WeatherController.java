@@ -1,5 +1,6 @@
 package com.varomir.qa.rest;
 
+import com.varomir.qa.client.WeatherClient;
 import com.varomir.qa.domain.Person;
 import com.varomir.qa.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,12 @@ import java.util.Optional;
 public class WeatherController {
 
     private final PersonRepository personRepository;
+    private final WeatherClient weatherClient;
 
     @Autowired
-    public WeatherController(final PersonRepository personRepository) {
+    public WeatherController(final PersonRepository personRepository, final WeatherClient weatherClient) {
         this.personRepository = personRepository;
+        this.weatherClient = weatherClient;
     }
 
     @GetMapping("/hello")
@@ -34,7 +37,7 @@ public class WeatherController {
     }
 
     @GetMapping("yesterdaysWeather")
-    public void yesterdayWeather() {
-        return;
+    public String yesterdayWeather() {
+        return weatherClient.yesterdaysWeather();
     }
 }

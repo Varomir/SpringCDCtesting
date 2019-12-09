@@ -1,6 +1,7 @@
 package com.varomir.qa.rest;
 
 import com.github.javafaker.Name;
+import com.varomir.qa.client.WeatherClient;
 import com.varomir.qa.commons.utils.WithFaker;
 import com.varomir.qa.domain.Person;
 import com.varomir.qa.repository.PersonRepository;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.anyString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
@@ -33,6 +35,9 @@ public class WeatherControllerTest implements WithFaker {
     @Mock
     private PersonRepository personRepository;
 
+    @Mock
+    private WeatherClient weatherClient;
+
 
     @BeforeEach
     public void setUp() {
@@ -40,7 +45,7 @@ public class WeatherControllerTest implements WithFaker {
         Name fakePersonName = getFakePersonName();
         firstName = fakePersonName.firstName();
         lastName = fakePersonName.lastName();
-        controllerUnderTest = new WeatherController(personRepository);
+        controllerUnderTest = new WeatherController(personRepository, weatherClient);
     }
 
     @DisplayName("'hello()' method should return expected greetings")
@@ -71,5 +76,13 @@ public class WeatherControllerTest implements WithFaker {
 
         assertEquals("Who is this 'Doe' you're talking about?", greeting,
                 "Returned error greetings text from the controller was not as expected!");
+    }
+
+    @DisplayName("'WeatherClient.yesterdaysWeather()' method should return correct weather data")
+    @Test
+    public void shouldCallWeatherClientYesterdayWeather() {
+        controllerUnderTest.yesterdayWeather();
+
+        verify(weatherClient).yesterdaysWeather();
     }
 }

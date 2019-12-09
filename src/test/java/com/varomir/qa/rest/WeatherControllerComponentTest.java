@@ -1,6 +1,7 @@
 package com.varomir.qa.rest;
 
 import com.github.javafaker.Name;
+import com.varomir.qa.client.WeatherClient;
 import com.varomir.qa.commons.utils.WithFaker;
 import com.varomir.qa.domain.Person;
 import com.varomir.qa.repository.PersonRepository;
@@ -36,6 +37,10 @@ public class WeatherControllerComponentTest implements WithFaker {
 
     @MockBean
     private PersonRepository personRepository;
+
+    @MockBean
+    private WeatherClient weatherClient;
+
     private String firstName, lastName;
 
     @BeforeEach
@@ -75,7 +80,9 @@ public class WeatherControllerComponentTest implements WithFaker {
     @DisplayName("'yesterdaysWeather' endpoint should return 2XX status code")
     @Test
     void shouldReturnYesterdaysWeather() throws Exception {
+        given(weatherClient.yesterdaysWeather()).willReturn("Kyiv, 7°C sunny");
         mockMvc.perform(get("/yesterdaysWeather"))
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().string("Kyiv, 7°C sunny"));
     }
 }
