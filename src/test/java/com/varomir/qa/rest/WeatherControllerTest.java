@@ -1,5 +1,6 @@
 package com.varomir.qa.rest;
 
+import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
 import com.varomir.qa.client.WeatherClient;
 import com.varomir.qa.commons.utils.WithFaker;
@@ -81,8 +82,14 @@ public class WeatherControllerTest implements WithFaker {
     @DisplayName("'WeatherClient.yesterdaysWeather()' method should return correct weather data")
     @Test
     public void shouldCallWeatherClientYesterdayWeather() {
-        controllerUnderTest.yesterdayWeather();
+        Faker faker = new Faker();
+        String expectedWeather = String.format("%s, %s %s",
+                faker.address().cityName(), faker.weather().temperatureCelsius(), faker.weather().description());
+        given(weatherClient.yesterdaysWeather()).willReturn(expectedWeather);
 
-        verify(weatherClient).yesterdaysWeather();
+        String actualWeather = controllerUnderTest.yesterdayWeather();
+
+        assertEquals(expectedWeather, actualWeather,
+                "Returned weather data were not as expected!");
     }
 }
