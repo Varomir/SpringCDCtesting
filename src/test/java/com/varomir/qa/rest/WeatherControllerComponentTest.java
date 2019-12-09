@@ -22,10 +22,11 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest
+@WebMvcTest(controllers = WeatherController.class)
 // https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/testing.html#testcontext-parallel-test-execution
 @Execution(ExecutionMode.SAME_THREAD)
 public class WeatherControllerComponentTest implements WithFaker {
@@ -69,5 +70,12 @@ public class WeatherControllerComponentTest implements WithFaker {
 
         mockMvc.perform(get("/hello/" + lastName))
                 .andExpect(content().string(String.format("Who is this '%s' you're talking about?", lastName)));
+    }
+
+    @DisplayName("'yesterdaysWeather' endpoint should return 2XX status code")
+    @Test
+    void shouldReturnYesterdaysWeather() throws Exception {
+        mockMvc.perform(get("/yesterdaysWeather"))
+                .andExpect(status().is2xxSuccessful());
     }
 }
