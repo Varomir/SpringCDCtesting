@@ -25,9 +25,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @Execution(ExecutionMode.CONCURRENT)
-public class HelloWorldControllerTest implements WithFaker {
+public class WeatherControllerTest implements WithFaker {
 
-    private HelloWorldController controllerUnderTest;
+    private WeatherController controllerUnderTest;
     private String firstName, lastName;
 
     @Mock
@@ -40,7 +40,7 @@ public class HelloWorldControllerTest implements WithFaker {
         Name fakePersonName = getFakePersonName();
         firstName = fakePersonName.firstName();
         lastName = fakePersonName.lastName();
-        controllerUnderTest = new HelloWorldController(personRepository);
+        controllerUnderTest = new WeatherController(personRepository);
     }
 
     @DisplayName("'hello()' method should return expected greetings")

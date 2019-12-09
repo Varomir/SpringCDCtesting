@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 // https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/testing.html#testcontext-parallel-test-execution
 @Execution(ExecutionMode.SAME_THREAD)
-public class HelloWorldControllerComponentTest implements WithFaker {
+public class WeatherControllerComponentTest implements WithFaker {
 
     @Autowired
     private MockMvc mockMvc;

@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-public class HelloWorldController {
+public class WeatherController {
 
     private final PersonRepository personRepository;
 
     @Autowired
-    public HelloWorldController(final PersonRepository personRepository) {
+    public WeatherController(final PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
 
@@ -31,5 +31,10 @@ public class HelloWorldController {
         return foundPerson
                 .map(person -> String.format("Hello %s %s!", person.getFirstName(), person.getLastName()))
                 .orElse(String.format("Who is this '%s' you're talking about?", lastName));
+    }
+
+    @GetMapping("yesterdaysWeather")
+    public void yesterdayWeather() {
+        return;
     }
 }
