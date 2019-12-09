@@ -1,5 +1,7 @@
 package com.varomir.qa.rest;
 
+import com.github.javafaker.Name;
+import com.varomir.qa.commons.utils.WithFaker;
 import com.varomir.qa.domain.Person;
 import com.varomir.qa.repository.PersonRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -21,13 +23,14 @@ import static org.hamcrest.Matchers.containsString;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Execution(ExecutionMode.CONCURRENT)
-public class HelloWorldAcceptanceTest {
+public class HelloWorldAcceptanceTest implements WithFaker {
 
     @Autowired
     PersonRepository personRepository;
 
     @LocalServerPort
     private int port;
+    private String firstName, lastName;
 
     @DisplayName("'/hello' endpoint should return expected response body text via HTTP protocol")
     @Test
@@ -39,16 +42,19 @@ public class HelloWorldAcceptanceTest {
                 .body(containsString("Hello World!"));
     }
 
-    @DisplayName("'/hello/{lastName}' endpoint should return expected greeting for the person")
+    @DisplayName("'/hello/${lastName}' endpoint should return expected greeting for the person")
     @Test
     public void shouldReturnExpectedGreetingsForPerson() {
-        Person johnDoe = new Person("John", "Doe");
-        personRepository.save(johnDoe);
+        Name fakePersonName = getFakePersonName();
+        firstName = fakePersonName.firstName();
+        lastName = fakePersonName.lastName();
+        Person fakePerson = new Person(firstName, lastName);
+        personRepository.save(fakePerson);
         
         when()
-                .get("http://localhost:" + port + "/hello/Doe")
+                .get(String.format("http://localhost:%d/hello/%s", port, lastName))
         .then()
                 .statusCode(is(200))
-                .body(containsString("Hello John Doe!"));
+                .body(containsString(String.format("Hello %s %s!", firstName, lastName)));
     }
 }

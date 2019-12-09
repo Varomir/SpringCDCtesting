@@ -1,5 +1,7 @@
 package com.varomir.qa.rest;
 
+import com.github.javafaker.Name;
+import com.varomir.qa.commons.utils.WithFaker;
 import com.varomir.qa.domain.Person;
 import com.varomir.qa.repository.PersonRepository;
 import org.junit.jupiter.api.*;
@@ -16,7 +18,6 @@ import java.util.Optional;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.anyString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
@@ -24,9 +25,10 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @Execution(ExecutionMode.CONCURRENT)
-public class HelloWorldControllerTest {
+public class HelloWorldControllerTest implements WithFaker {
 
     private HelloWorldController controllerUnderTest;
+    private String firstName, lastName;
 
     @Mock
     private PersonRepository personRepository;
@@ -35,9 +37,12 @@ public class HelloWorldControllerTest {
     @BeforeEach
     public void setUp() {
         initMocks(this);
+        Name fakePersonName = getFakePersonName();
+        firstName = fakePersonName.firstName();
+        lastName = fakePersonName.lastName();
         controllerUnderTest = new HelloWorldController(personRepository);
     }
-    
+
     @DisplayName("'hello()' method should return expected greetings")
     @Test
     public void shouldReturnExpectedGreetings() {
@@ -45,15 +50,15 @@ public class HelloWorldControllerTest {
                 "Returned text from the controller was not as expected!");
     }
 
-    @DisplayName("'hello(lastName)' method should return fullName of an existing Person")
+    @DisplayName("'hello($lastName)' method should return fullName of an existing Person")
     @Test
     public void shouldReturnFullNameOfAPerson() {
-        Person johnDoe = new Person("John", "Doe");
-        given(personRepository.findByLastName("Doe")).willReturn(Optional.of(johnDoe));
+        Person fakePerson = new Person(firstName, lastName);
+        given(personRepository.findByLastName(lastName)).willReturn(Optional.of(fakePerson));
 
-        String greeting = controllerUnderTest.hello("Doe");
+        String greeting = controllerUnderTest.hello(lastName);
 
-        assertEquals("Hello John Doe!", greeting,
+        assertEquals(String.format("Hello %s %s!", firstName, lastName), greeting,
                 "Returned successfully greetings text from the controller was not as expected!");
     }
 

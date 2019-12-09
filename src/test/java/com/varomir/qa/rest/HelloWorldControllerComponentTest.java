@@ -1,7 +1,10 @@
 package com.varomir.qa.rest;
 
+import com.github.javafaker.Name;
+import com.varomir.qa.commons.utils.WithFaker;
 import com.varomir.qa.domain.Person;
 import com.varomir.qa.repository.PersonRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,13 +28,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 // https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/testing.html#testcontext-parallel-test-execution
 @Execution(ExecutionMode.SAME_THREAD)
-public class HelloWorldControllerComponentTest {
+public class HelloWorldControllerComponentTest implements WithFaker {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private PersonRepository personRepository;
+    private String firstName, lastName;
+
+    @BeforeEach
+    public void setUp() {
+        Name fakePersonName = getFakePersonName();
+        firstName = fakePersonName.firstName();
+        lastName = fakePersonName.lastName();
+    }
 
 
     @DisplayName("'/hello' endpoint should return expected greetings when GET")
@@ -41,22 +52,22 @@ public class HelloWorldControllerComponentTest {
                 .andExpect(content().string("Hello World!"));
     }
 
-    @DisplayName("'/hello/{lastName}' endpoint should return expected greetings for the existing Person when GET")
+    @DisplayName("'/hello/${lastName}' endpoint should return expected greetings for the existing Person when GET")
     @Test
     void shouldReturnPersonFullName() throws Exception {
-        Person johnDoe = new Person("John", "Doe");
-        given(personRepository.findByLastName("Doe")).willReturn(Optional.of(johnDoe));
+        Person fakePerson = new Person(firstName, lastName);
+        given(personRepository.findByLastName(lastName)).willReturn(Optional.of(fakePerson));
 
-        mockMvc.perform(get("/hello/Doe"))
-                .andExpect(content().string("Hello John Doe!"));
+        mockMvc.perform(get(String.format("/hello/%s", lastName)))
+                .andExpect(content().string(String.format("Hello %s %s!", firstName, lastName)));
     }
 
-    @DisplayName("'/hello/{lastName}' endpoint should return expected error greetings for the unknown Person when GET")
+    @DisplayName("'/hello/${lastName}' endpoint should return expected error greetings for the unknown Person when GET")
     @Test
     void shouldReturnMessageIfPersonIsUnknown() throws Exception {
         given(personRepository.findByLastName(anyString())).willReturn(Optional.empty());
 
-        mockMvc.perform(get("/hello/Doe"))
-                .andExpect(content().string("Who is this 'Doe' you're talking about?"));
+        mockMvc.perform(get("/hello/" + lastName))
+                .andExpect(content().string(String.format("Who is this '%s' you're talking about?", lastName)));
     }
 }
