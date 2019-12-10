@@ -4,6 +4,7 @@ import com.github.javafaker.Name;
 import com.varomir.qa.client.WeatherClient;
 import com.varomir.qa.commons.utils.WithFaker;
 import com.varomir.qa.domain.Person;
+import com.varomir.qa.domain.WeatherResponse;
 import com.varomir.qa.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -77,10 +78,11 @@ public class WeatherControllerComponentTest implements WithFaker {
                 .andExpect(content().string(String.format("Who is this '%s' you're talking about?", lastName)));
     }
 
-    @DisplayName("'yesterdaysWeather' endpoint should return 2XX status code")
+    @DisplayName("'yesterdaysWeather' endpoint should return yesterday weather description")
     @Test
     void shouldReturnYesterdaysWeather() throws Exception {
-        given(weatherClient.yesterdaysWeather()).willReturn("Kyiv, 7°C sunny");
+        given(weatherClient.yesterdaysWeather())
+                .willReturn(WeatherResponse.weatherResponse().description("Kyiv, 7°C sunny").build());
         mockMvc.perform(get("/yesterdaysWeather"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().string("Kyiv, 7°C sunny"));

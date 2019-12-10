@@ -38,6 +38,6 @@ public class WeatherController {
 
     @GetMapping("yesterdaysWeather")
     public String yesterdayWeather() {
-        return weatherClient.yesterdaysWeather();
+        return weatherClient.yesterdaysWeather().getDescription();
     }
 }
