@@ -9,10 +9,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.Mock;
 import org.springframework.web.client.RestTemplate;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @Execution(ExecutionMode.CONCURRENT)
@@ -26,17 +24,18 @@ public class WeatherClientTest {
     @BeforeEach
     public void setUp() {
         initMocks(this);
-        clientUnderTest = new WeatherClient(restTemplate);
+        clientUnderTest = new WeatherClient(restTemplate, "http://localhost:8099");
     }
 
     @DisplayName("'WeatherClient.yesterdaysWeather()' method should return WeatherResponse object")
     @Test
-    public void shouldCallYahooService() {
-        given(restTemplate.getForObject(any(), eq(WeatherResponse.class)))
-                .willReturn(WeatherResponse.weatherResponse().description("Kyiv, 6°C sunny").build());
+    public void shouldCallWeatherService() {
+        WeatherResponse expectedResponse = WeatherResponse.weatherResponse().description("Kyiv, 6°C sunny").build();
+        given(restTemplate.getForObject("http://localhost:8099", WeatherResponse.class))
+                .willReturn(expectedResponse);
 
-        clientUnderTest.yesterdaysWeather();
+        WeatherResponse actualResponse = clientUnderTest.yesterdaysWeather();
 
-        verify(restTemplate).getForObject("yahoo", WeatherResponse.class);
+        assertEquals(expectedResponse, actualResponse, "'WeatherResponse.yesterdaysWeather()' method return incorrect data!");
     }
 }
